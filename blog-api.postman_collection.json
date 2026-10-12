@@ -1,0 +1,1991 @@
+{
+  "info": {
+    "_postman_id": "blog-api-collection-v2-1",
+    "name": "Blog API",
+    "description": "A complete, rerunnable Postman collection for the Blog API. Run requests in numerical order. The collection uses generated test users, collection variables, and placeholder admin credentials.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "testPassword",
+      "value": "Password123",
+      "type": "string"
+    },
+    {
+      "key": "user2Password",
+      "value": "Password123",
+      "type": "string"
+    },
+    {
+      "key": "newTestPassword",
+      "value": "Password1234",
+      "type": "string"
+    },
+    {
+      "key": "user1Email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user2Email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user2Id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user2Token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "blogId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "blogTitle",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "blogTitlePart",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "blogCategory",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "secondBlogId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Auth",
+      "description": "API documentation for the 01 Auth endpoints. Each request includes an example request and response body and can be run in order.",
+      "item": [
+        {
+          "name": "01 Register user1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User One\",\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/register\n\nExpected status: 201\n\nExample request body:\n{\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User One\",\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}\n\nExample response body:\n{\n  \"id\": 1,\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User One\",\n  \"email\": \"user-unique@example.com\",\n  \"role\": \"user\",\n  \"isActive\": true\n}"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"user1Email\", \"user1-\" + Date.now() + \"@example.com\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"userId\", pm.response.json().id); pm.collectionVariables.set(\"user1Email\", pm.response.json().email);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "02 Register user2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User Two\",\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/register\n\nExpected status: 201\n\nExample request body:\n{\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User Two\",\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{testPassword}}\"\n}\n\nExample response body:\n{\n  \"id\": 2,\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User Two\",\n  \"email\": \"user2@example.com\",\n  \"role\": \"user\"\n}"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"user2Email\", \"user2-\" + Date.now() + \"@example.com\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"user2Id\", pm.response.json().id); pm.collectionVariables.set(\"user2Email\", pm.response.json().email);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "03 Register with admin role (still user)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Attempted\",\n  \"lastname\": \"Admin\",\n  \"email\": \"role-attempt@example.com\",\n  \"password\": \"{{testPassword}}\",\n  \"role\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/register\n\nExpected status: 201\n\nExample request body:\n{\n  \"firstname\": \"Attempted\",\n  \"lastname\": \"Admin\",\n  \"email\": \"role-attempt@example.com\",\n  \"password\": \"{{testPassword}}\",\n  \"role\": \"admin\"\n}\n\nExample response body:\n{\n  \"role\": \"user\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.test(\"role is user\", function () { pm.expect(pm.response.json().role).to.eql(\"user\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "04 Register duplicate email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Duplicate\",\n  \"lastname\": \"User\",\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/register\n\nExpected status: 409\n\nExample request body:\n{\n  \"firstname\": \"Duplicate\",\n  \"lastname\": \"User\",\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Email already exists.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 409\", function () { pm.response.to.have.status(409); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "05 Register invalid email format",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Invalid\",\n  \"lastname\": \"Email\",\n  \"email\": \"not-an-email\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/register\n\nExpected status: 400\n\nExample request body:\n{\n  \"firstname\": \"Invalid\",\n  \"lastname\": \"Email\",\n  \"email\": \"not-an-email\",\n  \"password\": \"{{testPassword}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Email must be valid.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "06 Register missing fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"missing-fields@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/register\n\nExpected status: 400\n\nExample request body:\n{\n  \"email\": \"missing-fields@example.com\"\n}\n\nExample response body:\n{\n  \"message\": \"First name is required.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "07 Login user1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/login\n\nExpected status: 200\n\nExample request body:\n{\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Login successful\",\n  \"token\": \"<jwt>\",\n  \"user\": {\n    \"id\": 1,\n    \"role\": \"user\"\n  }\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"userToken\", pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "08 Login user2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/login\n\nExpected status: 200\n\nExample request body:\n{\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{testPassword}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Login successful\",\n  \"token\": \"<jwt>\",\n  \"user\": {\n    \"id\": 2,\n    \"role\": \"user\"\n  }\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"user2Token\", pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "09 Login with wrong password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"WrongPassword123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/login\n\nExpected status: 401\n\nExample request body:\n{\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"WrongPassword123\"\n}\n\nExample response body:\n{\n  \"message\": \"Invalid email or password.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "10 Login as admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/login\n\nExpected status: 200\n\nExample request body:\n{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Login successful\",\n  \"token\": \"<jwt>\",\n  \"user\": {\n    \"role\": \"admin\"\n  }\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"adminToken\", pm.response.json().token);",
+                  "pm.test(\"admin role is returned\", function () { pm.expect(pm.response.json().user.role).to.eql(\"admin\"); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "02 Users",
+      "description": "API documentation for the 02 Users endpoints. Each request includes an example request and response body and can be run in order.",
+      "item": [
+        {
+          "name": "11 GET users as admin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/users\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n[\n  {\n    \"id\": 1,\n    \"firstname\": \"Postman\",\n    \"lastname\": \"User One\",\n    \"email\": \"user@example.com\",\n    \"role\": \"user\"\n  }\n]"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "12 GET users as normal user",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/users\n\nExpected status: 403\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"Admin access required.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "13 GET users with no token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/users\n\nExpected status: 401\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"Authentication required.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "14 GET user by id as admin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{userId}}"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/users/{{userId}}\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"id\": 1,\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User One\",\n  \"role\": \"user\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "15 GET missing user as admin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "999999"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/users/999999\n\nExpected status: 404\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"User not found.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "16 GET user with invalid id as admin",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "abc"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/users/abc\n\nExpected status: 400\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"User id must be a positive integer.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "17 GET profile as user1",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/users/profile\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"id\": 1,\n  \"firstname\": \"Postman\",\n  \"lastname\": \"User One\",\n  \"role\": \"user\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "18 Update profile and attempt role escalation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstname\": \"Updated\",\n  \"lastname\": \"User\",\n  \"role\": \"admin\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/profile/update",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "profile",
+                "update"
+              ]
+            },
+            "description": "API documentation\n\nPUT /api/users/profile/update\n\nExpected status: 200\n\nExample request body:\n{\n  \"firstname\": \"Updated\",\n  \"lastname\": \"User\",\n  \"role\": \"admin\"\n}\n\nExample response body:\n{\n  \"firstname\": \"Updated\",\n  \"lastname\": \"User\",\n  \"role\": \"user\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.test(\"role remains user\", function () { pm.expect(pm.response.json().role).to.eql(\"user\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "19 Update password",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"{{newTestPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "password"
+              ]
+            },
+            "description": "API documentation\n\nPATCH /api/users/password\n\nExpected status: 200\n\nExample request body:\n{\n  \"password\": \"{{newTestPassword}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Password updated successfully.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.collectionVariables.set(\"testPassword\", pm.collectionVariables.get(\"newTestPassword\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "20 Update password too short",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"short\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/password",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "password"
+              ]
+            },
+            "description": "API documentation\n\nPATCH /api/users/password\n\nExpected status: 400\n\nExample request body:\n{\n  \"password\": \"short\"\n}\n\nExample response body:\n{\n  \"message\": \"Password must be at least 6 characters.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "21 Login user1 with new password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/login\n\nExpected status: 200\n\nExample request body:\n{\n  \"email\": \"{{user1Email}}\",\n  \"password\": \"{{testPassword}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Login successful\",\n  \"token\": \"<jwt>\",\n  \"user\": {\n    \"id\": 1,\n    \"role\": \"user\"\n  }\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"userToken\", pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "22 Deactivate user2 as admin",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{user2Id}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{user2Id}}",
+                "status"
+              ]
+            },
+            "description": "API documentation\n\nPATCH /api/users/{{user2Id}}/status\n\nExpected status: 200\n\nExample request body:\n{\n  \"isActive\": false\n}\n\nExample response body:\n{\n  \"id\": 2,\n  \"isActive\": false\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "23 Login deactivated user2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{user2Password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/login\n\nExpected status: 403\n\nExample request body:\n{\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{user2Password}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Your account is deactivated.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "24 Reactivate user2 and login",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{user2Id}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{user2Id}}",
+                "status"
+              ]
+            },
+            "description": "API documentation\n\nPATCH /api/users/{{user2Id}}/status\n\nExpected status: 200\n\nExample request body:\n{\n  \"isActive\": true\n}\n\nExample response body:\n{\n  \"id\": 2,\n  \"isActive\": true\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"user2Token\", pm.collectionVariables.get(\"user2Token\"));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "25 Login user2 after reactivation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{user2Password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/auth/login\n\nExpected status: 200\n\nExample request body:\n{\n  \"email\": \"{{user2Email}}\",\n  \"password\": \"{{user2Password}}\"\n}\n\nExample response body:\n{\n  \"message\": \"Login successful\",\n  \"token\": \"<jwt>\",\n  \"user\": {\n    \"id\": 1,\n    \"role\": \"user\"\n  }\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"user2Token\", pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "26 Update user2 status as normal user",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isActive\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{user2Id}}/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                "{{user2Id}}",
+                "status"
+              ]
+            },
+            "description": "API documentation\n\nPATCH /api/users/{{user2Id}}/status\n\nExpected status: 403\n\nExample request body:\n{\n  \"isActive\": false\n}\n\nExample response body:\n{\n  \"message\": \"Admin access required.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "03 Blogs",
+      "description": "API documentation for the 03 Blogs endpoints. Each request includes an example request and response body and can be run in order.",
+      "item": [
+        {
+          "name": "27 Create blog as user1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogTitle\": \"{{blogTitle}}\",\n  \"blog\": \"A blog created by the Postman collection.\",\n  \"category\": \"{{blogCategory}}\",\n  \"userId\": 999999\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "create"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/blogs/create\n\nExpected status: 201\n\nExample request body:\n{\n  \"blogTitle\": \"{{blogTitle}}\",\n  \"blog\": \"A blog created by the Postman collection.\",\n  \"category\": \"{{blogCategory}}\",\n  \"userId\": 999999\n}\n\nExample response body:\n{\n  \"id\": 1,\n  \"blogTitle\": \"Postman collection blog\",\n  \"category\": \"testing\",\n  \"author\": {\n    \"id\": 1,\n    \"firstname\": \"Postman\",\n    \"lastname\": \"User One\"\n  }\n}"
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"blogTitle\", \"Postman Collection Blog \" + Date.now()); pm.collectionVariables.set(\"blogCategory\", \"testing\");"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"blogId\", pm.response.json().id); pm.collectionVariables.set(\"blogTitle\", pm.response.json().blogTitle); pm.collectionVariables.set(\"blogTitlePart\", pm.response.json().blogTitle.split(\" \")[0]); pm.collectionVariables.set(\"blogCategory\", pm.response.json().category); pm.test(\"blog belongs to user1\", function () { pm.expect(pm.response.json().author.id).to.eql(Number(pm.collectionVariables.get(\"userId\"))); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "28 Create blog with no token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogTitle\": \"Unauthorized blog\",\n  \"blog\": \"Should not be created.\",\n  \"category\": \"testing\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "create"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/blogs/create\n\nExpected status: 401\n\nExample request body:\n{\n  \"blogTitle\": \"Unauthorized blog\",\n  \"blog\": \"Should not be created.\",\n  \"category\": \"testing\"\n}\n\nExample response body:\n{\n  \"message\": \"Authentication required.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 401\", function () { pm.response.to.have.status(401); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "29 Create blog with empty title",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogTitle\": \"\",\n  \"blog\": \"Invalid blog.\",\n  \"category\": \"testing\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "create"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/blogs/create\n\nExpected status: 400\n\nExample request body:\n{\n  \"blogTitle\": \"\",\n  \"blog\": \"Invalid blog.\",\n  \"category\": \"testing\"\n}\n\nExample response body:\n{\n  \"message\": \"blogTitle is required.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "30 GET blogs with no token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/blogs\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n[\n  {\n    \"id\": 1,\n    \"blogTitle\": \"Postman collection blog\",\n    \"author\": {\n      \"id\": 1,\n      \"firstname\": \"Postman\",\n      \"lastname\": \"User One\"\n    }\n  }\n]"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.test(\"authors contain only public fields\", function () { pm.response.json().forEach(function (item) { pm.expect(item.author).to.have.property(\"id\"); pm.expect(item.author).to.have.property(\"firstname\"); pm.expect(item.author).to.have.property(\"lastname\"); pm.expect(item.author).not.to.have.property(\"email\"); pm.expect(item.author).not.to.have.property(\"password\"); }); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "31 GET blogs by title",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs?title={{blogTitlePart}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs"
+              ],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "{{blogTitlePart}}",
+                  "description": "Filter by title"
+                }
+              ]
+            },
+            "description": "API documentation\n\nGET /api/blogs?title={{blogTitlePart}}\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n[\n  {\n    \"blogTitle\": \"Postman collection blog\"\n  }\n]"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "32 GET blogs by category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs?category={{blogCategory}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "{{blogCategory}}",
+                  "description": "Filter by category"
+                }
+              ]
+            },
+            "description": "API documentation\n\nGET /api/blogs?category={{blogCategory}}\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n[\n  {\n    \"category\": \"testing\"\n  }\n]"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "33 GET blogs by title and category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs?title={{blogTitlePart}}&category={{blogCategory}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs"
+              ],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "{{blogTitlePart}}",
+                  "description": "Filter by title"
+                },
+                {
+                  "key": "category",
+                  "value": "{{blogCategory}}",
+                  "description": "Filter by category"
+                }
+              ]
+            },
+            "description": "API documentation\n\nGET /api/blogs?title={{blogTitlePart}}&category={{blogCategory}}\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n[\n  {\n    \"blogTitle\": \"Postman collection blog\",\n    \"category\": \"testing\"\n  }\n]"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "34 GET blog by id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/{{blogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "{{blogId}}"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/blogs/{{blogId}}\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"id\": 1,\n  \"blogTitle\": \"Postman collection blog\",\n  \"author\": {\n    \"id\": 1,\n    \"firstname\": \"Postman\",\n    \"lastname\": \"User One\"\n  }\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "35 GET missing blog",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/999999",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "999999"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/blogs/999999\n\nExpected status: 404\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"Blog not found.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "36 GET blog with invalid id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/abc",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "abc"
+              ]
+            },
+            "description": "API documentation\n\nGET /api/blogs/abc\n\nExpected status: 400\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"Invalid blog id.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 400\", function () { pm.response.to.have.status(400); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "37 Update blog as user1",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogTitle\": \"Updated by user1\",\n  \"blog\": \"Updated content by the owner.\",\n  \"category\": \"{{blogCategory}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/update/{{blogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "update",
+                "{{blogId}}"
+              ]
+            },
+            "description": "API documentation\n\nPUT /api/blogs/update/{{blogId}}\n\nExpected status: 200\n\nExample request body:\n{\n  \"blogTitle\": \"Updated by user1\",\n  \"blog\": \"Updated content by the owner.\",\n  \"category\": \"{{blogCategory}}\"\n}\n\nExample response body:\n{\n  \"id\": 1,\n  \"blogTitle\": \"Updated by user1\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "38 Update blog as user2",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user2Token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogTitle\": \"Unauthorized update\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/update/{{blogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "update",
+                "{{blogId}}"
+              ]
+            },
+            "description": "API documentation\n\nPUT /api/blogs/update/{{blogId}}\n\nExpected status: 403\n\nExample request body:\n{\n  \"blogTitle\": \"Unauthorized update\"\n}\n\nExample response body:\n{\n  \"message\": \"You are not authorized to update this blog.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "39 Update blog as admin",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogTitle\": \"Updated by admin\",\n  \"blog\": \"Updated content by admin.\",\n  \"category\": \"{{blogCategory}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/update/{{blogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "update",
+                "{{blogId}}"
+              ]
+            },
+            "description": "API documentation\n\nPUT /api/blogs/update/{{blogId}}\n\nExpected status: 200\n\nExample request body:\n{\n  \"blogTitle\": \"Updated by admin\",\n  \"blog\": \"Updated content by admin.\",\n  \"category\": \"{{blogCategory}}\"\n}\n\nExample response body:\n{\n  \"id\": 1,\n  \"blogTitle\": \"Updated by admin\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "40 Delete blog as user2",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{user2Token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/delete/{{blogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "delete",
+                "{{blogId}}"
+              ]
+            },
+            "description": "API documentation\n\nDELETE /api/blogs/delete/{{blogId}}\n\nExpected status: 403\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"You are not authorized to delete this blog.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 403\", function () { pm.response.to.have.status(403); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "41 Delete blog as user1",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/delete/{{blogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "delete",
+                "{{blogId}}"
+              ]
+            },
+            "description": "API documentation\n\nDELETE /api/blogs/delete/{{blogId}}\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"Blog deleted successfully.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "42 Delete blog again",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/delete/{{blogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "delete",
+                "{{blogId}}"
+              ]
+            },
+            "description": "API documentation\n\nDELETE /api/blogs/delete/{{blogId}}\n\nExpected status: 404\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"Blog not found.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 404\", function () { pm.response.to.have.status(404); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "43 Create another blog as user1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{userToken}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"blogTitle\": \"Second collection blog\",\n  \"blog\": \"A second blog for admin deletion.\",\n  \"category\": \"testing\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "create"
+              ]
+            },
+            "description": "API documentation\n\nPOST /api/blogs/create\n\nExpected status: 201\n\nExample request body:\n{\n  \"blogTitle\": \"Second collection blog\",\n  \"blog\": \"A second blog for admin deletion.\",\n  \"category\": \"testing\"\n}\n\nExample response body:\n{\n  \"id\": 2,\n  \"blogTitle\": \"Second collection blog\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 201\", function () { pm.response.to.have.status(201); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });",
+                  "pm.collectionVariables.set(\"secondBlogId\", pm.response.json().id); pm.test(\"second blog was created\", function () { pm.expect(pm.response.json().id).to.be.a(\"number\"); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "44 Delete second blog as admin",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/blogs/{{secondBlogId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "blogs",
+                "{{secondBlogId}}"
+              ]
+            },
+            "description": "API documentation\n\nDELETE /api/blogs/{{secondBlogId}}\n\nExpected status: 200\n\nExample request body:\n{}\n\nExample response body:\n{\n  \"message\": \"Blog deleted successfully.\"\n}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"status is 200\", function () { pm.response.to.have.status(200); });",
+                  "pm.test(\"response body is present and valid JSON\", function () { pm.expect(pm.response.text()).to.not.be.empty; pm.expect(pm.response.json()).to.be.an(\"object\").or.to.be.an(\"array\"); });",
+                  "pm.test(\"user responses never expose passwords\", function () { const containsPassword = (value) => { if (!value || typeof value !== \"object\") return false; if (Array.isArray(value)) return value.some(containsPassword); if (Object.prototype.hasOwnProperty.call(value, \"password\")) return true; return Object.values(value).some(containsPassword); }; pm.expect(containsPassword(pm.response.json())).to.eql(false); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Request-specific setup is defined on individual requests."
+        ]
+      }
+    }
+  ]
+}
